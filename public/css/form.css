@@ -1,0 +1,16 @@
+form{
+    width: 35%;
+    margin-top: 50px;
+}
+select{
+    margin: 20px;
+}
+h1{
+    text-align: center;
+}
+button{
+    position: relative;
+    left: 60px;
+    width: 200px;
+    display: block;
+}
