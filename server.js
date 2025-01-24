@@ -18,7 +18,6 @@ const demo = require('./routes/demo');
 app.use("/",demo)
 
 
-
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {
