@@ -8,8 +8,7 @@ app.use(express.static('public'));
 app.set("view engine", "ejs");
 
 
-const adminRouter = require('./routes/admin');
-app.use("/", adminRouter);
+
 const dropdownRouter = require('./routes/dropdown');
 app.use("/", dropdownRouter);
 const questionRouter = require('./routes/question');

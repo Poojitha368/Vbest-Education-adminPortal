@@ -1,5 +1,10 @@
+body{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
 form{
-    width: 35%;
+    width: 90%;
     margin-top: 50px;
 }
 select{
@@ -10,7 +15,7 @@ h1{
 }
 button{
     position: relative;
-    left: 60px;
+    left: 460px;
     width: 200px;
     display: block;
 }

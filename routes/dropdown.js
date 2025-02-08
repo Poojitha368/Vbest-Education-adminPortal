@@ -5,7 +5,7 @@ const db = require('../database')
 router.get('/',(req,res)=>{
     db.query('SELECT * from syllabus',(err,syllabus)=>{
         if(err) throw err;
-        res.render('admin',{ syllabus })
+        res.render('dropdown',{ syllabus })
     })
 })
 
@@ -32,6 +32,5 @@ router.get('/chapters/:subjectId/:yearId', (req, res) => {
         res.json(chapters);
     });
 });
-
 
 module.exports = router;

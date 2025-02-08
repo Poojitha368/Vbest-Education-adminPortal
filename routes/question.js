@@ -1,77 +1,71 @@
-const express = require('express');
+// Express Router
+const express = require("express");
 const router = express.Router();
-const db = require('../database')
-const multer=require('multer')
-const path=require('path')
-router.use(express.json());  // This line is important
-const fs = require('fs');
+const multer = require("multer");
+const fs = require("fs");
 
-router.use(express.urlencoded({ extended: false }));
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null,'../uploads'); 
+// Ensure upload directory exists
+const uploadDir = "./uploads";
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Multer Configuration
+const imgConfig = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, uploadDir),
+    filename: (req, file, cb) => {
+        const modifiedName = file.originalname.replace(/\s+/g, "_");
+        cb(null, `image-${Date.now()}-${modifiedName}`);
     },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname); 
-    }
-})
-const upload = multer({ dest: '../uploads/' })
-
-router.post('/submit-question/:chapterId',
-    upload.fields([
-        {name: 'question_image'},
-        // {name: 'solution_image'},
-        // {name: 'option1_image'},
-        // {name: 'option2_image'},
-        // {name: 'option3_image'},
-        // {name: 'option4_image'},
-    ]), 
-    (req, res) => {
-    // const { question,question_type,option1,option2,option3,option4,solution,level,key,minimum_time} = req.body;  
-    const { question} = req.body;  
-    const chapterId = req.params.chapterId;
-    const files = req.files; // contains the uploaded files
-    // Check if files exist and log filenames
-    console.log(files)
-    //check if file exist, otherwise assign null
-    // const question_image = files['question_image'] ? files['question_image'][0].filename:null;
-    // const option1_image = files['option1_image'] ? files['option1_image'][0].filename : null;
-    // const option2_image = files['option2_image'] ? files['option2_image'][0].filename : null;
-    // const option3_image = files['option3_image'] ? files['option3_image'][0].filename : null;
-    // const option4_image = files['option4_image'] ? files['option4_image'][0].filename : null;
-    // const solution_image = files['solution_image'] ? files['solution_image'][0].filename : null;
-
-
-    // const query = 'INSERT INTO question (question,chapter_id, question_type, option1, option2, option3, option4, solution, level, answer_key, minimum_time, question_image, option1_image, option2_image, option3_image, option4_image, solution_image)';
-    const query = 'INSERT INTO question (question,chapter_id, question_image) values(?,?,?)';
-    db.query(query,
-            [   question || null,
-                chapterId,
-                // question_type || null,
-                // option1 || null,
-                // option2 || null,
-                // option3 || null,
-                // option4 || null,
-                // solution || null,
-                // level || null,
-                // key || null,
-                // minimum_time || null,
-                question_image,
-                // option1_image,
-                // option2_image,
-                // option3_image,
-                // option4_image,
-                // solution_image
-            ], 
-            (err, result) => {
-        if (err) {
-            console.error('Database error:', err);
-            return res.status(500).json({ error: 'Failed to insert question' });
-        }
-        console.log("Data inserted:", result);
-        res.status(201).json({ message: 'Question added successfully' });
-    });
 });
+
+const isImage = (req, file, cb) => {
+    file.mimetype.startsWith("image") ? cb(null, true) : cb(new Error("Invalid file type"), false);
+};
+
+const upload = multer({ storage: imgConfig, fileFilter: isImage });
+
+// Route to render form page
+router.get("/questions", (req, res) => res.render("questions"));
+
+// POST route for form submission
+router.post(
+    "/upload/:chapterid",
+    upload.fields([
+        { name: "question_image" },
+        { name: "solution_image" },
+        { name: "option1_image" },
+        { name: "option2_image" },
+        { name: "option3_image" },
+        { name: "option4_image" },
+    ]),
+    (req, res) => {
+        console.log(req);
+        try {
+            const { question, question_type, level, key, minimum_time, option1, option2, option3, option4, solution } = req.body;
+            if (!question) return res.status(400).json({ error: "Question text is required" });
+
+            const extractFilename = (field) => req.files[field]?.[0]?.filename || null;
+
+            const formData = {
+                question, question_type, level, key, minimum_time, option1, option2, option3, option4, solution,
+                question_image: extractFilename("question_image"),
+                solution_image: extractFilename("solution_image"),
+                option1_image: extractFilename("option1_image"),
+                option2_image: extractFilename("option2_image"),
+                option3_image: extractFilename("option3_image"),
+                option4_image: extractFilename("option4_image"),
+            };
+
+            console.log("Received form data", formData);
+            res.status(200).json({ message: "Question added successfully", data: formData });
+        } catch (error) {
+            res.status(500).json({ error: "Server error", details: error.message });
+        }
+    }
+);
 
 module.exports = router;
