@@ -20,7 +20,7 @@
         <div id="section1">
           <textarea name="question" id="question" placeholder="enter your question here"></textarea>
           <input type="file" name="question_image">
-          <select class="form-select" aria-label="Default select example" name="question_type">
+          <select class="form-select" aria-label="Default select example" name="question_type" required>
             <option selected>select question type</option>
             <option value="mcq">multiple choice</option>
             <option value="short">short answer</option>
@@ -52,13 +52,13 @@
           </div>
           </div>
           <div id="section3">
-            <select class="form-select" aria-label="Default select example" name="level">
+            <select class="form-select" aria-label="Default select example" name="level" required>
               <option selected>select level</option>
               <option value="easy">easy</option>
               <option value="med">medium</option>
               <option value="hard">hard</option>
             </select>
-            <select class="form-select" aria-label="Default select example" name="key">
+            <select class="form-select" aria-label="Default select example" name="key" required>
               <option selected>answer key</option>
               <option value="option1">option1</option>
               <option value="option2">option2</option>
