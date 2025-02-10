@@ -1,0 +1,14 @@
+.full-height {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px; 
+  }
+  .card {
+    min-height: 300px; 
+    padding:50px;
+  }
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+  }

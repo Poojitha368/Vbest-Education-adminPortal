@@ -15,6 +15,8 @@ const questionRouter = require('./routes/question');
 app.use("/",questionRouter)
 const demo = require('./routes/demo');
 app.use("/",demo)
+const landing = require('./routes/landing');
+app.use("/",landing)
 
 
 // Start server
