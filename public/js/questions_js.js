@@ -15,11 +15,11 @@ $(document).ready(function () {
         formData.append("level", $("select[name='level']").val());
         formData.append("key", $("select[name='key']").val());
         formData.append("minimum_time", $("#minimum_time").val());
-        formData.append("option1", $("#option1").val().trim());
-        formData.append("option2", $("#option2").val().trim());
-        formData.append("option3", $("#option3").val().trim());
-        formData.append("option4", $("#option4").val().trim());
-        formData.append("solution", $("#solution").val().trim());
+        formData.append("option1", $("#option1").val());
+        formData.append("option2", $("#option2").val());
+        formData.append("option3", $("#option3").val());
+        formData.append("option4", $("#option4").val());
+        formData.append("solution", $("#solution").val());
 
         // Append images if selected
         const appendFile = (name) => {
@@ -27,8 +27,18 @@ $(document).ready(function () {
             if (file) formData.append(name, file);
         };
 
+         // Function to append multiple files
+         const appendFiles = (name) => {
+            let files = document.querySelector(`input[name="${name}"]`)?.files;
+            if (files) {
+                Array.from(files).forEach(file => {
+                    formData.append(name, file);  // Append each file separately
+                });
+            }
+        };
+
         appendFile("question_image");
-        appendFile("solution_image");
+        appendFiles("solution_image");
         appendFile("option1_image");
         appendFile("option2_image");
         appendFile("option3_image");

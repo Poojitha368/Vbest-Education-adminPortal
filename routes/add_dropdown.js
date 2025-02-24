@@ -5,7 +5,7 @@ const db = require('../database')
 router.get('/',(req,res)=>{
     db.query('SELECT * from syllabus',(err,syllabus)=>{
         if(err) throw err;
-        res.render('dropdown',{ syllabus })
+        res.render('add_dropdown',{ syllabus })
     })
 })
 

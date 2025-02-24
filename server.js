@@ -9,14 +9,18 @@ app.set("view engine", "ejs");
 
 
 
-const dropdownRouter = require('./routes/dropdown');
-app.use("/", dropdownRouter);
+const adddropdownRouter = require('./routes/add_dropdown');
+app.use("/", adddropdownRouter);
+const editdropdownRouter = require('./routes/edit_dropdown');
+app.use("/edit", editdropdownRouter);
 const questionRouter = require('./routes/question');
 app.use("/",questionRouter)
 const demo = require('./routes/demo');
 app.use("/",demo)
-const landing = require('./routes/landing');
-app.use("/",landing)
+const home = require('./routes/home');
+app.use("/",home)
+const edit = require('./routes/edit_question');
+app.use("/",edit)
 
 
 // Start server
